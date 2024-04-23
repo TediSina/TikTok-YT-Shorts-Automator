@@ -1,0 +1,9 @@
+.env
+__pycache__
+client_secrets.json
+cookies.txt
+youtube_credentials.pkl
+video_info.db
+editor/Edited-Videos/*
+downloader/Downloaded-Tiktoks/*
+downloader/3.25_0/*
