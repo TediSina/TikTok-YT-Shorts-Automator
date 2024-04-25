@@ -125,7 +125,10 @@ class YouTubeUploader:
 if __name__ == '__main__':
     video_path = input("Enter the path to your video file (e.g., path_to_your_video_file.mp4): ").strip('"')
     title = input("Enter the title for your short video: ")
-    description = input("Enter the description for your short video: ")
+    while True:
+        description = input("Enter the video description (max. 100 characters): ")
+        if len(description) <= 100:
+            break
     tags = input("Enter tags for your short video (comma-separated, e.g., tag1,tag2,tag3): ").split(',')
 
     uploader = YouTubeUploader()

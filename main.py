@@ -91,7 +91,24 @@ def upload_new_video() -> bool:
 
 def upload_failed_video() -> bool:
     """
-    Uploads failed video from the database.
+    Uploads failed videos from the database.
+    
+    This function retrieves failed videos from the 'video_info' table in the database. The failed videos are selected based on the following conditions:
+    - 'downloaded_tiktok' is NULL
+    - 'edited_video' is NULL and 'downloaded_tiktok' is not NULL
+    - 'tiktok_is_uploaded' is 0 and 'edited_video' is not NULL
+    - 'youtube_video_id' is NULL or 'tiktok_is_uploaded' is NULL
+    
+    For each failed video, the function performs the following steps:
+    - If 'downloaded_tiktok' is None, it downloads the TikTok video using the 'download_tiktok' function. If the download is successful, it updates the 'video_info' table with the downloaded TikTok video.
+    - If 'edited_video' is None, it adds a watermark to the downloaded TikTok video using the 'add_watermark_to_video' function. If the watermarking is successful, it updates the 'video_info' table with the edited video.
+    - If 'tiktok_is_uploaded' is None, it uploads the edited video to TikTok using the 'upload_tiktok' function. If the upload is successful, it updates the 'video_info' table with the upload status.
+    - If 'youtube_video_id' is None, it uploads the edited video to YouTube using the 'YouTubeUploader' class. If the upload is successful, it updates the 'video_info' table with the YouTube video ID.
+    
+    If all failed videos are successfully processed, the function returns True. If any error occurs during the process, the function prints the error message and returns False.
+    
+    Returns:
+        bool: True if all failed videos are successfully processed, False otherwise.
     """
     try:
         # Get failed videos from the database in priority order
@@ -104,6 +121,10 @@ def upload_failed_video() -> bool:
         c.execute("SELECT * FROM video_info WHERE youtube_video_id IS NULL OR tiktok_is_uploaded IS NULL")
         failed_videos.extend(c.fetchall())
 
+        if len(failed_videos) == 0:
+            print("No failed videos found.")
+            return True
+        
         for video_info in failed_videos:
             tiktok_url, video_description, watermark_position, downloaded_tiktok, edited_video, tiktok_is_uploaded, youtube_video_id = video_info
 
@@ -143,15 +164,15 @@ def upload_failed_video() -> bool:
 
 
 if __name__ == "__main__":
-    failed_video = input("Would you like to upload a failed video (Respond with 'yes' or 'y' if affirmative)? ")
-
-    if failed_video.lower() == "yes" or failed_video.lower() == "y":
-        upload_failed_video() # Upload failed video
-
-    new_video = input("Would you like to upload a new video (Respond with 'yes' or 'y' if affirmative)? ")
+    new_video = input("Do you want to upload a new video? (Type 'yes' or 'y' to proceed): ")
 
     if new_video.lower() == "yes" or new_video.lower() == "y":
         upload_new_video() # Upload new video
+
+    failed_video = input("Do you want to upload a failed video? (Type 'yes' or 'y' to proceed): ")
+
+    if failed_video.lower() == "yes" or failed_video.lower() == "y":
+        upload_failed_video() # Upload failed video
 
     print("Goodbye!")
     conn.close()
