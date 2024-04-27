@@ -112,14 +112,8 @@ def upload_failed_video() -> bool:
     """
     try:
         # Get failed videos from the database in priority order
-        c.execute("SELECT * FROM video_info WHERE downloaded_tiktok IS NULL")
+        c.execute("SELECT * FROM video_info WHERE downloaded_tiktok IS NULL OR edited_video IS NULL OR tiktok_is_uploaded IS NULL OR youtube_video_id IS NULL")
         failed_videos = c.fetchall()
-        c.execute("SELECT * FROM video_info WHERE edited_video IS NULL AND downloaded_tiktok IS NOT NULL")
-        failed_videos.extend(c.fetchall())
-        c.execute("SELECT * FROM video_info WHERE tiktok_is_uploaded = 0 AND edited_video IS NOT NULL")
-        failed_videos.extend(c.fetchall())
-        c.execute("SELECT * FROM video_info WHERE youtube_video_id IS NULL OR tiktok_is_uploaded IS NULL")
-        failed_videos.extend(c.fetchall())
 
         if len(failed_videos) == 0:
             print("No failed videos found.")

@@ -4,7 +4,7 @@ from tiktok_uploader.auth import AuthBackend
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def upload_tiktok(video_path, description, cookies) -> bool | None:
+def upload_tiktok(video_path, description, cookies=None) -> bool | None:
     """
     Uploads a TikTok video to the user's account.
 
@@ -17,7 +17,7 @@ def upload_tiktok(video_path, description, cookies) -> bool | None:
         bool | None: True if the video is uploaded successfully, None if an exception occurs.
     """
     try:
-        if not cookies:
+        if cookies is None:
             cookies = BASE_DIR + r"\cookies.txt"
 
         videos = [

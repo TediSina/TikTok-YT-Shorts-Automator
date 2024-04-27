@@ -15,10 +15,10 @@ def ensure_video_is_portrait(existing_clip: CompositeVideoClip) -> CompositeVide
         CompositeVideoClip: The composite video clip with the existing clip centered on an empty black clip, or the original clip if it's portrait.
     """
     # Check if the existing clip is portrait or square.
-    if existing_clip.size[0] > existing_clip.size[1]:
+    if existing_clip.size[0] <= existing_clip.size[1]:
         # Return the original clip if it's portrait or square.
         return existing_clip
-    
+
     # Calculate the aspect ratio of the input clip.
     input_aspect_ratio = existing_clip.size[0] / existing_clip.size[1]
 

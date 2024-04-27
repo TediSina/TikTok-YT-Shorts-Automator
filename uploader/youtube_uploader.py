@@ -93,33 +93,10 @@ class YouTubeUploader:
             video_id = response["id"]
             print(f"Video uploaded successfully. Video ID: {video_id}")
 
-            # Like the uploaded video
-            self.like_video(video_id)
-
             return video_id
-
         except googleapiclient.errors.HttpError as e:
             print(f"An error occurred: {e}")
             return None
-
-    def like_video(self, video_id):
-        """
-        Likes the video with the specified video ID.
-
-        Parameters:
-            video_id (str): The ID of the video to be liked.
-
-        Returns:
-            None
-        """
-        try:
-            self.youtube.videos().rate(
-                id=video_id,
-                rating="like"
-            ).execute()
-            print("Video liked successfully.")
-        except googleapiclient.errors.HttpError as e:
-            print(f'An error occurred while liking the video: {e}')
 
 
 if __name__ == '__main__':
