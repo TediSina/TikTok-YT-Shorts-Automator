@@ -1,0 +1,6 @@
+google_api_python_client==2.125.0
+google_auth_oauthlib==1.2.0
+moviepy==1.0.3
+python-dotenv==1.0.1
+selenium==4.20.0
+tiktok_uploader==1.0.16
